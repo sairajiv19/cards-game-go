@@ -58,7 +58,7 @@ func loadDeck(filename string) deck {
 
 func (d deck) shuffleDeckRand() {
 	n := len(d)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		j := rand.Intn(n)
 		d[i], d[j] = d[j], d[i]
 	}
