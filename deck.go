@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"os"
 	"strings"
 )
 
@@ -34,6 +36,30 @@ func (d deck) Deal(handSize int) (deck, deck) {
 }
 
 func (d deck) toString() string {
-	var finalStr string = strings.Join(d, ", ")
-	return finalStr
+	return strings.Join(d, ", ")
+}
+
+func (d deck) saveDeck(filename string) {
+	err := os.WriteFile(filename, []byte(d.toString()), 0666)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		os.Exit(1)
+	}
+}
+
+func loadDeck(filename string) deck {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Printf("\n%v\n", err)
+		os.Exit(1) // not recommended we should return err and if nothing then nil
+	}
+	return deck(strings.Split(string(data), ", "))
+}
+
+func (d deck) shuffleDeckRand() {
+	n := len(d)
+	for i := 0; i < n; i++ {
+		j := rand.Intn(n)
+		d[i], d[j] = d[j], d[i]
+	}
 }
